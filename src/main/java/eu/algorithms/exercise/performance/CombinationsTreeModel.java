@@ -1,12 +1,11 @@
 package eu.algorithms.exercise.performance;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 public class CombinationsTreeModel extends DefaultTreeModel {
@@ -74,33 +73,4 @@ public class CombinationsTreeModel extends DefaultTreeModel {
         return null;
     }
 
-    public DefaultMutableTreeNode addCombination(Combination combination) {
-        return addCombinationNode(getRoot(), combination, 0);
-    }
-
-    private DefaultMutableTreeNode addCombinationNode(DefaultMutableTreeNode parent, 
-            Combination combination, int codeIndex) {
-        
-        String code = combination.getCode(codeIndex);
-        DefaultMutableTreeNode child = findChild(parent, code);
-        if(child == null) {
-            child = new DefaultMutableTreeNode(code);
-            child.setAllowsChildren(true);
-            insertNodeInto(child, parent, getChildCount(parent));
-        }
-        if(codeIndex < combination.getCodeCount() - 1) {
-            addCombinationNode(child, combination, codeIndex + 1);
-        }
-        return child;
-    }
-
-    private DefaultMutableTreeNode findChild(DefaultMutableTreeNode parent, String code) {
-        for(int i = 0; i < getChildCount(parent); i++) {
-            DefaultMutableTreeNode child = getChild(parent, i);
-            if(child.getUserObject().equals(code)) {
-                return child;
-            }
-        }
-        return null;
-    }
 }

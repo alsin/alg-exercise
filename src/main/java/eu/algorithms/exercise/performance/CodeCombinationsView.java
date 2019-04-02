@@ -1,8 +1,10 @@
 package eu.algorithms.exercise.performance;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,21 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JToolBar;
-import javax.swing.JTree;
-import javax.swing.UIManager;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
 
 public class CodeCombinationsView extends JPanel {
 
@@ -86,7 +73,7 @@ public class CodeCombinationsView extends JPanel {
 
                 showCombinations(tree.getSelectionPaths());
 
-                logTime(startMillis, "Select time: %ds");
+                logTime(startMillis, "Select time: %ds (%dms)");
             }
         });
         
@@ -101,12 +88,13 @@ public class CodeCombinationsView extends JPanel {
 
     private void logTime(final long startMillis, final String message) {
         final long endMillis = System.currentTimeMillis();
-
+        final long millisDiff = endMillis - startMillis;
         System.out.println(
                 String.format(message,
-                        TimeUnit.SECONDS.convert(endMillis - startMillis, TimeUnit.MILLISECONDS))
+                        TimeUnit.SECONDS.convert(millisDiff, TimeUnit.MILLISECONDS),
+                        millisDiff
+                )
         );
-
     }
 
     private void showCombinations(final TreePath[] paths) {
@@ -153,27 +141,15 @@ public class CodeCombinationsView extends JPanel {
         tableModel.clear();
         treeModel.clear();
 
-//        Object root = treeModel.getRoot();
-//        tree.expandPath(new TreePath(root));
-
         final long startMillis = System.currentTimeMillis();
 
         Object root = treeModel.init(combinations);
 
-//        tree.expandPath(new TreePath(new Object[] { root, child }));
-
-//        combinations.forEach(combination -> {
-//            final DefaultMutableTreeNode child = treeModel.addCombination(combination);
-//            tree.expandPath(new TreePath(new Object[] { root, child }));
-//        });
-
-        logTime(startMillis, "Load data time: %ds");
-//        tree.setSelectionPath(new TreePath(root));
+        logTime(startMillis, "Load data time: %ds (%dms)");
 
         final TreePath rootPath = new TreePath(root);
         tree.expandPath(rootPath);
         tree.setSelectionPath(rootPath);
-
     }
 
     private void loadTableData(final List<Combination> combinations) {
@@ -193,7 +169,7 @@ public class CodeCombinationsView extends JPanel {
                 }
             }
 
-            logTime(startMillis, "Reading finished. Time taken: %ds");
+            logTime(startMillis, "Reading finished. Time taken: %ds (%dms)");
             return combinations;
         }
     }
