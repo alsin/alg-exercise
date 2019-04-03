@@ -1,16 +1,14 @@
 package eu.algorithms.exercise.duplicate;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class RunSpellingCheck {
+
     public static void main(String[] args) {
         String[] types = { "Pipe", "flange", "Reducer" };
         String[] sizes = { "1'", "2'", ",3" };
+
         List<Component> components = new ArrayList<>();
         for(String type : types) {
             for(String size : sizes) {
@@ -18,20 +16,22 @@ public class RunSpellingCheck {
             }
         }
 
-        SpellingCheck check = new SpellingCheck();
+        final SpellingCheck<StringComponent> check = new SpellingCheck<>();
         for(String type : types) {
-            check.checkSpelling(type);
+            check.checkSpelling(new StringComponent(type));
         }
+
         for(String size : sizes) {
-            check.checkSpelling(size);
+            check.checkSpelling(new StringComponent(size));
         }
-        List<String> incorrect = new ArrayList<>();
+
+        final List<StringComponent> incorrect = new ArrayList<>();
         incorrect.addAll(check.getSpellingDoubleCommaComponents());
         incorrect.addAll(check.getSpellingBeginCapitalComponents());
         incorrect.addAll(check.getSpellingWhiteSpacesComponents());
         System.out.println("Incorrect attributes: " + incorrect);
 
-        ComponentSpellingCheck componentCheck = new ComponentSpellingCheck();
+        final SpellingCheck<Component> componentCheck = new SpellingCheck<>();
         for(Component component : components) {
             componentCheck.checkSpelling(component);
         }
@@ -60,7 +60,9 @@ public class RunSpellingCheck {
     public static Set<Component> findSameComponents(
             Collection<? extends Component> componentsA,
             Collection<? extends Component> componentsB) {
-        // TODO Not yet implemented
-        return null;
+        final Set<Component> componentsACopy = new HashSet<>(componentsA);
+        componentsACopy.retainAll(componentsB);
+        return componentsACopy;
     }
+
 }
