@@ -35,16 +35,18 @@ public class RunSpellingCheck {
         for(Component component : components) {
             componentCheck.checkSpelling(component);
         }
-        List<Component> incorrectComponents = new ArrayList<>();
+
+        final List<Component> incorrectComponents = new ArrayList<>();
         incorrectComponents.addAll(componentCheck.getSpellingDoubleCommaComponents());
         incorrectComponents.addAll(componentCheck.getSpellingBeginCapitalComponents());
         incorrectComponents.addAll(componentCheck.getSpellingWhiteSpacesComponents());
+
         System.out.println("Incorrect components:");
         for(Component component : incorrectComponents) {
             System.out.println(component.getDescription());
         }
 
-        Set<Component> set = new HashSet<>();
+        final Set<Component> set = new HashSet<>();
         set.add(new Component(types[1], sizes[0]));
         set.add(new Component(types[1], sizes[0]));
         set.add(new Component(types[1], sizes[2]));
@@ -62,6 +64,8 @@ public class RunSpellingCheck {
             Collection<? extends Component> componentsB) {
         final Set<Component> componentsACopy = new HashSet<>(componentsA);
         componentsACopy.retainAll(componentsB);
+        System.out.println("componentsA: " + componentsA);
+        System.out.println("componentsB: " + componentsB);
         return componentsACopy;
     }
 
