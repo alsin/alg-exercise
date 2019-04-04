@@ -24,20 +24,12 @@ public class Combination {
         return index < codes.size() ? codes.get(index) : "";
     }
 
-    public boolean startsWith(final List<String> startCodes) {
-//        if (startCodes == null || startCodes.isEmpty() || startCodes.size() > codes.size()) {
-//            return false;
-//        }
+    public List<String> getCodes() {
+        return codes;
+    }
 
-        for (int i = 0; i < startCodes.size(); i++) {
-            final String startCode = startCodes.get(i);
-            final String code = codes.get(i);
-            if (!code.equals(startCode)) {
-                return false;
-            }
-        }
-
-        return true;
+    public static Combination fromList(final List<String> codes) {
+        return new Combination(codes);
     }
 
     public static Combination fromString(final String str) {

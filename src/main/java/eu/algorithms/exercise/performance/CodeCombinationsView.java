@@ -10,11 +10,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class CodeCombinationsView extends JPanel {
 
@@ -45,7 +43,7 @@ public class CodeCombinationsView extends JPanel {
     private CombinationsTreeModel treeModel;
     private JTree tree;
     
-    private List<Combination> combinations;
+    private Node combinationsTree = Node.createNode("Combinations");
 
     public CodeCombinationsView() {
         JToolBar toolBar = new JToolBar();
@@ -104,9 +102,7 @@ public class CodeCombinationsView extends JPanel {
             for (final TreePath path : paths) {
                 final List<String> codes = treeModel.pathToCodes(path);
 
-                filtered = combinations.stream()
-                        .filter(combination -> combination.startsWith(codes))
-                        .collect(Collectors.toList());
+                filtered = Node.getCombinations(combinationsTree, codes);
             }
 
         }
@@ -132,18 +128,17 @@ public class CodeCombinationsView extends JPanel {
     }
     
     private void loadCombinations(File file) throws IOException {
-        this.combinations = readCombinationsFromFile(file);//readLines(file);
-
-        loadData(combinations);
+        this.combinationsTree = readCombinationsTreeFromFile(file);
+        loadData(combinationsTree);
     }
 
-    private void loadData(final List<Combination> combinations) {
+    private void loadData(final Node combinationsTree) {
         tableModel.clear();
         treeModel.clear();
 
         final long startMillis = System.currentTimeMillis();
 
-        Object root = treeModel.init(combinations);
+        Object root = treeModel.init(combinationsTree);
 
         logTime(startMillis, "Load data time: %ds (%dms)");
 
@@ -157,20 +152,21 @@ public class CodeCombinationsView extends JPanel {
         tableModel.setCombinations(combinations);
     }
 
-    private List<Combination> readCombinationsFromFile(final File file) throws IOException {
-        final List<Combination> combinations = new ArrayList<>();
+    private Node readCombinationsTreeFromFile(final File file) throws IOException {
+
         final long startMillis = System.currentTimeMillis();
         try (final BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if(!line.isEmpty()) {
-                    combinations.add(Combination.fromString(line));
+                    final Combination combination = Combination.fromString(line);
+                    combinationsTree.addCombination(combination);
                 }
             }
 
             logTime(startMillis, "Reading finished. Time taken: %ds (%dms)");
-            return combinations;
+            return combinationsTree;
         }
     }
 

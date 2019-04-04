@@ -42,8 +42,7 @@ public class CombinationsTreeModel extends DefaultTreeModel {
         return codes;
     }
 
-    public DefaultMutableTreeNode init(final List<Combination> combinations) {
-        final Node modelTreeRootNode = Node.createTreeFromCombinations(combinations);
+    public DefaultMutableTreeNode init(final Node modelTreeRootNode) {
         DefaultMutableTreeNode root = insertTree(modelTreeRootNode, null);
         if (root == null) {
             root = new DefaultMutableTreeNode("NULL");
