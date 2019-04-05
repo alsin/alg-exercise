@@ -45,7 +45,7 @@ public class CodeCombinationsView extends JPanel {
     private CombinationsTreeModel treeModel;
     private JTree tree;
     
-    private List<Combination> combinations;
+    private List<Combination> combinations = Collections.emptyList();
 
     public CodeCombinationsView() {
         JToolBar toolBar = new JToolBar();
